@@ -18,6 +18,7 @@
 	<div class="container">
 
     <form action="index.html" method="post" novalidate>
+      
       <p id="form-hint" class="form-hint"><span class="asterisk">*</span> - required field</p>
 
       <div class="basic-info-and-shirt-box">       
@@ -58,6 +59,7 @@
           <div class="shirt-div-box">
             <div id="shirt-sizes" class="shirt-sizes">
               <label for="size">Size:</label>
+
               <select id="size" name="user-size">
                 <option value="small">S</option>
                 <option value="medium" selected>M</option>
@@ -101,6 +103,7 @@
       <fieldset id="activities" class="activities">
 
         <legend>Register for Activities <span class="asterisk">*</span></legend>
+        
         <div id="activities-box" class="activities-box error-border">
 
           <label>
@@ -151,7 +154,7 @@
           </label> 
 
           <label>
-            <input type="checkbox" name="express" data-day-and-time="Wednesday 1pm-4pm" data-cost="100"> 
+            <input type="checkbox" name="express" data-day-and-time ="Wednesday 1pm-4pm" data-cost="100"> 
             <span>Express Workshop</span>
             <span>Wednesday 1pm-4pm</span> 
             <span class="activity-cost">$100</span>
@@ -162,7 +165,6 @@
         <p id="activities-cost" class="activities-cost">Total: $0</p>
         
         <p id="activities-hint" class="activities-hint hint">Choose at least one activity</p>      
-
       </fieldset>
 
       <fieldset class="payment-methods">
@@ -216,7 +218,7 @@
 
           <div class="credit-card-box">
             <div class="num-box">
-              <label for="cc-num">Card Number: <span class="asterisk">*</span>
+              <label for="cc-num">                                    
                 <input id="cc-num" name="user-cc-num" type="text" class="error-border">
                 <span id="cc-hint" class="cc-hint hint">Credit card number must be between 13 - 16 digits</span>
               </label>

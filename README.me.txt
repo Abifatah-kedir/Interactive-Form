@@ -1,0 +1,2 @@
+
+name, email and activity selection options has real time validation errors that actively provide hints for the user before submit button is clicked.the javascript code monitors the name and email fields as user enters the information. for example the user can only enter letters in the name field, otherwise it pops up a message letting the user know that name fileds ... can't contain a number. the code also checks the email fields , if the user does not provide valid email format there will be pop up message letting the user to provide valid email format. 
