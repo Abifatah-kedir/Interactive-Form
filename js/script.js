@@ -223,19 +223,26 @@ const activityValidator = (targetBox)=> {
 */
 
 const CardValidator = (userInput)=> {
-        let minCardNumber = 13;
-        let maxCardNumber = 16;
+    let result = false;
 
-        let userInputValue = userInput.value;
-        let cardNumberLength = userInputValue.length;
-        let targetLabel = userInput.nextElementSibling;
-        
-        if (  !isNaN(userInputValue) && (cardNumberLength >= minCardNumber && cardNumberLength <= maxCardNumber) ) {
-            userInput.parentElement.className = "valid";
-            targetLabel.style.display = "none";
-        }else {
-            validationFailHint(userInput);
-        }
+    let minCardNumber = 13;
+    let maxCardNumber = 16;
+
+    let userInputValue = userInput.value;
+    let cardNumberLength = userInputValue.length;
+    let targetLabel = userInput.nextElementSibling;
+    
+    if (  !isNaN(userInputValue) && (cardNumberLength >= minCardNumber && cardNumberLength <= maxCardNumber) ) {
+        userInput.parentElement.className = "valid";
+        targetLabel.style.display = "none";
+
+        result = true;
+    }else {
+        validationFailHint(userInput);
+    }
+
+
+    return result;
 }
 
 /* 
@@ -243,18 +250,19 @@ const CardValidator = (userInput)=> {
 */
 
 const zipValidator = (zipCode)=> {
-
+    let result = false;
     let enteredZipNumber = zipCode.value;
     let targetLabel = zipCode.nextElementSibling;
 
     if(!isNaN(enteredZipNumber) && (enteredZipNumber.length === 5) ) {
         zipCode.parentElement.className = "valid";
         targetLabel.style.display = "none";
+        result = true;
     }else {
         validationFailHint(zipCode);
     }
    
-
+    return result;
 }
 
 /* 
@@ -262,16 +270,20 @@ const zipValidator = (zipCode)=> {
 */
 
 const cvvValidator = (cvvCode)=> {
-
+    let result = false;
     let enteredCvvNumber = cvvCode.value;
     let targetLabel = cvvCode.nextElementSibling;
 
     if(!isNaN(enteredCvvNumber) && (enteredCvvNumber.length === 3) ) {
         cvvCode.parentElement.className = "valid";
         targetLabel.style.display = "none";
+
+        result = true;
     }else {
         validationFailHint(cvvCode);
     }
+
+    return result;
 }  
 
 
@@ -351,9 +363,9 @@ autoLoad();
 submit.addEventListener('submit', (e)=> {
  
 
-    if(color.disabled)  {
-        e.preventDefault();
-    } 
+    // if(color.disabled)  {
+    //     e.preventDefault();
+    // } 
 
     // Name Validator.
     if (inputName.value !== "") {
@@ -384,11 +396,12 @@ submit.addEventListener('submit', (e)=> {
     // // Payments Validator 
 
     if(payment.value == "credit-card"){
-
+       
+        // cardValidator
         if(!CardValidator(cardNumber)) {
             e.preventDefault();
         }
-    
+
         // zipValidator
         if(!zipValidator(zipCode)) {
             e.preventDefault();
