@@ -1,4 +1,4 @@
-/* Global vairables */
+ /* Global vairables */
 
 //basic info.
 const inputName = document.querySelector("#name");
@@ -43,7 +43,7 @@ const submit = document.querySelector("form");
 =============================*/
 
 // excutes when browser gets loaded and places focus on name Inut filed, 
-    //hidds other job role input field.
+//hidds other job role input field.
 
 const autoLoad = ()=> {
 
@@ -57,9 +57,7 @@ const autoLoad = ()=> {
     color.disabled = true;
   
     // auto selects the credit card payments
-    Switcher(payment[1]);
-
-    
+    Switcher(payment[1]); 
 }
 
 /* =================================
@@ -67,7 +65,7 @@ const autoLoad = ()=> {
 ======================================*/
 
 // switches the user selection on design.
-const Switcher = (selected)=> {
+const Switcher = (selected) => {
 
     if (selected.name === "user-design") {
 
@@ -121,14 +119,11 @@ const validationFailHint = (input)=> {
     givenHintMessage.style.display = "block";
 }
 
-
-
 // validates name, email and cridit card payment methods.
 const userInputAutoSensing = (element)=> {
 
     let targetName  = element.name;
-    let targetParent = element.parentElement.parentElement.parentElement
-    console.log(targetName);
+    let targetParent = element.parentElement.parentElement.parentElement;
 
     let hintMessage = element.nextElementSibling;
 
@@ -142,16 +137,19 @@ const userInputAutoSensing = (element)=> {
             hintMessage.innerHTML  = `${targetName} not valid .. can't contain a number.`;
             element.parentElement.className = "not-valid";
             hintMessage.style.display = "block";
+
         } else if (targetName === "user-email" && !emailIsValid) {
 
             hintMessage.innerHTML  = `${targetName} not valid.. Please, provide valid email format.`;
             hintMessage.style.display = "block";
             element.parentElement.className = "not-valid";
+            
         }else {
 
             element.parentElement.className = "valid";
             hintMessage.style.display = "none";
         }
+
     } else if(targetParent.className === "credit-card-box") {
         if (targetName === "user-cc-num") {
             CardValidator(element);
@@ -160,6 +158,7 @@ const userInputAutoSensing = (element)=> {
         } else if(targetName === "user-cvv") {
             cvvValidator(element);
         }
+        
     }
 }
 /* 
@@ -278,7 +277,7 @@ const cvvValidator = (cvvCode)=> {
 
 /* ===================================
         Accessiblity 
-   ==================================*/
+    ==================================*/
    for(let i = 0; i < activitiesBox.length; i++) {
 
        activitiesBox[i].addEventListener("focus", (event)=> {
@@ -300,7 +299,8 @@ const cvvValidator = (cvvCode)=> {
     the input fields and auto validates 
 ======================================*/
 
-submit.addEventListener("change", (event)=> {
+submit.addEventListener("click", (event)=> {
+
     let userTarget  = event.target;
 
     if ( userTarget.type === "text" || userTarget.type === "email") {
@@ -327,11 +327,15 @@ submit.addEventListener("change", (event)=> {
         for (let i = 1; i < color.length; i++) {
             color[i].style.display = "block";
         }
+
         Switcher(userTarget);
+
    } else if(userTarget.name === "user-payment") {
        Switcher(userTarget);
    } 
 });
+
+
 
 /* ===============================================
     calls when browser loads by defualt
@@ -345,8 +349,13 @@ autoLoad();
 
 // Fires the form opon clicked the submtting botton.
 submit.addEventListener('submit', (e)=> {
-    
-    // name validator.
+ 
+
+    if(color.disabled)  {
+        e.preventDefault();
+    } 
+
+    // Name Validator.
     if (inputName.value !== "") {
         userInputAutoSensing(inputName);
     } else {
@@ -354,7 +363,7 @@ submit.addEventListener('submit', (e)=> {
         e.preventDefault();
     }
 
-    //Email validator.
+    // Email Validator.
     if( inputEmail.value !== "" ) {
         userInputAutoSensing(inputEmail);
     }else {
@@ -363,31 +372,33 @@ submit.addEventListener('submit', (e)=> {
     }
 
     //activity validator.
-    if (TotalCost ===  0) {
-        e.preventDefault();
-        activitiesTitle.style.color = "red";
-        activitiesHint.style.display = "block";
-    } else {
+    if (TotalCost !=  0) {
         activitiesTitle.style.color = "#000";
         activitiesHint.style.display = "none";
-    }
-        
-    //payment validator.
-    if(paymentSelection === "credit-card") {
-        CardValidator(cardNumber);
-        zipValidator(zipCode);
-        cvvValidator(cvvNumber);
-
-    }else {
+    } else {
+        activitiesTitle.style.color = "red";
+        activitiesHint.style.display = "block";
         e.preventDefault();
     }
 
+    // // Payments Validator 
+
+    if(payment.value == "credit-card"){
+
+        if(!CardValidator(cardNumber)) {
+            e.preventDefault();
+        }
+    
+        // zipValidator
+        if(!zipValidator(zipCode)) {
+            e.preventDefault();
+        }
+
+        // cvvValidator
+        if (!cvvValidator(cvvNumber) ){
+            e.preventDefault();
+        }
+    }
+   
 });
 
-
-
-
-// const test = document.getElementsByTagName("div");
-// for(let i = 0; i < test.length; i++ ) {
-//     console.log(test[i]);
-// }
