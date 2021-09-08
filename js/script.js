@@ -1,6 +1,6 @@
  /* Global vairables */
 
-//basic info.
+//Basic info.
 const inputName = document.querySelector("#name");
 const inputEmail = document.querySelector("#email");
 
@@ -12,22 +12,24 @@ const userJobSelection = document.querySelector("#title");
 const otherJobRole = document.querySelector(".other-job-role");
 
 // T-shirt info.
+// const tshirtSelection = document.querySelector(".shirt-designs");
 const color = document.querySelector("#color");
 const design = document.querySelector("#design");
 
-// registrar activity
+// Registrar activity
 const activities = document.querySelector(".activities");
 const activitiesBox = document.querySelectorAll(".activities-box input");
+
 let  activitiesCost = document.querySelector(".activities-cost");
 let TotalCost = 0;
 
-//payment info
+// Payment info
 const paymentMethod = document.querySelector(".payment-methods").children;
 
 const payment = document.querySelector("#payment");
 const paymentOptions = payment.children;
 
-//validation 
+// Validation 
 const activitiesTitle = activities.firstElementChild;
 let activitiesHint = activities.lastElementChild;
 
@@ -38,13 +40,14 @@ let cvvNumber = document.querySelector("#cvv");
 
 const submit = document.querySelector("form");
 
-/* ==========================
-    auto loader function
-=============================*/
+/*
+    =================================================
+    Auto loader function
+    =================================================
+*/
 
-// excutes when browser gets loaded and places focus on name Inut filed, 
-//hidds other job role input field.
-
+// Excutes when browser gets loaded and places focus on name Inut filed, 
+// Hidds other job role input field.
 const autoLoad = ()=> {
 
     //auto focuses name input fields s
@@ -60,114 +63,125 @@ const autoLoad = ()=> {
     Switcher(payment[1]); 
 }
 
-/* =================================
+/*
+    ====================================================
     Resuable functions 
-======================================*/
+    ====================================================
+*/
 
 // switches the user selection on design.
 const Switcher = (selected) => {
 
-    if (selected.name === "user-design") {
+    let methodValue = selected.value;
+    paymentSelection = methodValue;
 
-        // records user selected value.
-        let selectedTheme = selected.value;
-        
-        // sorts the colors and hides colors not match with user selection.
-        for(let i = 1; i< color.length; i++) {
-            
-            let theColor = color[i];
-            let theColorTheme = theColor.getAttribute('data-theme');
-    
-           if(selectedTheme !== theColorTheme) {
-            theColor.style.display = "none";
-           }
+    // selects payment options according user selected option.
+    for (let i = 1; i < paymentOptions.length; i++) {
+        let paymentOption = paymentOptions[i].value;
+        if ( paymentOption.includes(methodValue)) {
+            paymentOptions[i].selected = "true";   
+        }
+    } 
 
+    // hides payment methods according to the user selection.
+    for(let i = 2; i < paymentMethod.length; i++) {
+        let paymentClassName = paymentMethod[i].className;
+        paymentMethod[i].style.display = "block";
+        if( !paymentClassName.includes(methodValue)) {
+            paymentMethod[i].style.display = "none";
         }
 
-    } else {
-
-        let methodValue = selected.value;
-        paymentSelection = methodValue;
-
-        // selects payment options according user selected option.
-        for (let i = 1; i < paymentOptions.length; i++) {
-            let paymentOption = paymentOptions[i].value;
-            if ( paymentOption.includes(methodValue)) {
-                paymentOptions[i].selected = "true";   
-            }
-        } 
-
-        // hides payment methods according to the user selection.
-        for(let i = 2; i < paymentMethod.length; i++) {
-    
-            let paymentClassName = paymentMethod[i].className;
-            paymentMethod[i].style.display = "block";
-            if( !paymentClassName.includes(methodValue)) {
-                paymentMethod[i].style.display = "none";
-            }
-    
-        }
     }
-   
-
 }
 
 // unhides Error Hint messages after submition button clicked.
-const validationFailHint = (input)=> {
+const showError = (input)=> {
     input.parentElement.className = "not-valid";
     let givenHintMessage = input.nextElementSibling;
     givenHintMessage.style.display = "block";
 }
 
-// validates name, email and cridit card payment methods.
-const userInputAutoSensing = (element)=> {
+/* 
+    =====================================================
+    Basic Information Validator
+    =====================================================
+*/
+const UserNameValidator = (element)=> {
 
-    let targetName  = element.name;
-    let targetParent = element.parentElement.parentElement.parentElement;
+    let result = false;
+    // let targetName  = element.name;
+    // let targetParent = element.parentElement.parentElement.parentElement;
 
     let hintMessage = element.nextElementSibling;
+    let nameIsValid = nameValidator.test(element.value);
 
-    if(targetName === "user-name" || targetName === "user-email") {
+    if (nameIsValid) {
+        // validationFailHint(inputName);  
+        result = true;
+        element.parentElement.className = "valid";
+        hintMessage.style.display = "none";
 
-        let nameIsValid = nameValidator.test(element.value);
-        let emailIsValid =  emailValidator.test(element.value);
-
-        if (targetName === "user-name" && !nameIsValid) {
-
-            hintMessage.innerHTML  = `${targetName} not valid .. can't contain a number.`;
-            element.parentElement.className = "not-valid";
-            hintMessage.style.display = "block";
-
-        } else if (targetName === "user-email" && !emailIsValid) {
-
-            hintMessage.innerHTML  = `${targetName} not valid.. Please, provide valid email format.`;
-            hintMessage.style.display = "block";
-            element.parentElement.className = "not-valid";
-            
-        }else {
-
-            element.parentElement.className = "valid";
-            hintMessage.style.display = "none";
-        }
-
-    } else if(targetParent.className === "credit-card-box") {
-        if (targetName === "user-cc-num") {
-            CardValidator(element);
-        }else if(targetName === "user-zip") {
-            zipValidator(element);
-        } else if(targetName === "user-cvv") {
-            cvvValidator(element);
-        }
+        return result;
         
+    } else {
+        return result;
     }
 }
+
+const UserEmailValidator = (element)=> {
+    let result = false;
+    // let targetName  = element.name;
+    // let targetParent = element.parentElement.parentElement.parentElement;
+    let emailIsValid =  emailValidator.test(element.value);
+    let hintMessage = element.nextElementSibling;
+
+    if ( emailIsValid) {
+        result = true;
+        element.parentElement.className = "valid";
+        hintMessage.style.display = "none";  
+        return result;
+
+    } else {
+
+        return result;
+
+    }
+
+}
+
+/*
+    ======================================================
+    Color theme Selection Validator
+    ======================================================
+*/
+design.addEventListener("change", (event)=> {
+
+    let userSelection = event.target;
+    if (userSelection.name === "user-design") {
+
+        color.disabled = false;
+        // records user selected value.
+        let selectedTheme = userSelection.value;
+        for(let i = 1; i < color.length; i++) {
+            color[i].style.display = "block";
+            let theColorTheme = color[i].getAttribute('data-theme');
+            if(selectedTheme !== theColorTheme) {
+                color[i].style.display = "none";
+            }
+        }
+        color[0].selected = 'selected';
+    }
+}); 
+
 /* 
-    checks if the atleast one of the activity box was  been selected and ..
-    alerts according to response of the logic.
+    ===================================================================
+        Activity validator
+        checks if the atleast one of the activity box was been selected 
+        and .. alerts according to response of the logic
+    ==================================================================
 */
 
 const activityValidator = (targetBox)=> {
-
     let currentTargetDate = targetBox.getAttribute("data-day-and-time");
 
     let boxDataTheme = targetBox.getAttribute("data-cost");
@@ -199,8 +213,8 @@ const activityValidator = (targetBox)=> {
         for(let i = 1; i <activitiesBox.length; i++) 
         {
             let targetDate = activitiesBox[i].nextElementSibling.nextElementSibling.innerHTML;
-            if(targetDate === currentTargetDate){
 
+            if( targetDate === currentTargetDate ) {
                 let targetInput = activitiesBox[i];
                 targetInput.disabled = false;
 
@@ -208,7 +222,6 @@ const activityValidator = (targetBox)=> {
                 boxElement.classList.remove("disabled");
             }
         }
-        
         TotalCost -= costNumber;
         activitiesHint.style.display = "block";
     }
@@ -217,9 +230,14 @@ const activityValidator = (targetBox)=> {
     activitiesCost.innerHTML = `Total: ${TotalCost}`;
 }
 
-/*  
-    This helper function that accepts one paramenter
-     and descides if the cridit card entered values are valid using the cardNo paramete. 
+/* 
+    ===========================================================
+        Cridit Card Validator
+    
+        This helper function that accepts one paramenter and 
+        descides if the cridit card entered values are valid using 
+        The cardNo parameter. 
+    =============================================================
 */
 
 const CardValidator = (userInput)=> {
@@ -238,7 +256,7 @@ const CardValidator = (userInput)=> {
 
         result = true;
     }else {
-        validationFailHint(userInput);
+        showError(userInput);
     }
 
 
@@ -259,7 +277,7 @@ const zipValidator = (zipCode)=> {
         targetLabel.style.display = "none";
         result = true;
     }else {
-        validationFailHint(zipCode);
+        showError(zipCode);
     }
    
     return result;
@@ -280,46 +298,44 @@ const cvvValidator = (cvvCode)=> {
 
         result = true;
     }else {
-        validationFailHint(cvvCode);
+        showError(cvvCode);
     }
 
     return result;
 }  
 
+/*
+    ===========================================
+       Form Accessiblity 
+    ===========================================
+*/
 
-/* ===================================
-        Accessiblity 
-    ==================================*/
-   for(let i = 0; i < activitiesBox.length; i++) {
+for(let i = 0; i < activitiesBox.length; i++) {
+    activitiesBox[i].addEventListener("focus", (event)=> {
+        let focusEvent = event.target;
+        focusEvent.parentElement.className = "focus";
+    });
 
-       activitiesBox[i].addEventListener("focus", (event)=> {
-          
-           let focusEvent = event.target;
-           focusEvent.parentElement.className = "focus";
-       });
+    activitiesBox[i].addEventListener("blur", (event)=> {
+        let blurEvent =  event.target;
+        blurEvent.parentElement.className = "blur";
+    });
+}
 
-       activitiesBox[i].addEventListener("blur", (event)=> {
-           let blurEvent =  event.target;
-           blurEvent.parentElement.className = "blur";
-       });
-   }
+/*
+    ============================================
+        User event listeners
 
-/* ===================================
-    User event listeners
-
-    listens the any change that user does on 
-    the input fields and auto validates 
-======================================*/
+        listens the any change that user does on 
+        the input fields and auto validates 
+    ============================================
+*/
 
 submit.addEventListener("click", (event)=> {
 
     let userTarget  = event.target;
 
-    if ( userTarget.type === "text" || userTarget.type === "email") {
-
-        userInputAutoSensing(userTarget);
-
-    } else if(userTarget.name === "user-title") {
+    if(userTarget.name === "user-title") {
 
        let userSelected = userTarget.value;
        if(userSelected === "other") {
@@ -332,86 +348,82 @@ submit.addEventListener("click", (event)=> {
         
         activityValidator(userTarget);
 
-    } else if (userTarget.name === "user-design") {
-
-        color.disabled = false;
-        //rests the colorOptions.
-        for (let i = 1; i < color.length; i++) {
-            color[i].style.display = "block";
-        }
-
-        Switcher(userTarget);
-
-   } else if(userTarget.name === "user-payment") {
+    } else if(userTarget.name === "user-payment") {
        Switcher(userTarget);
    } 
 });
 
 
+/*
+    =============================================
+    Calls when browser loads by defualt
+    =============================================
+*/
 
-/* ===============================================
-    calls when browser loads by defualt
-============================================= */
 
 autoLoad(); 
 
-/*================================================= 
+/*
+    ================================================
     Validation button.
-==================================================*/
+    ================================================
+*/
 
 // Fires the form opon clicked the submtting botton.
-submit.addEventListener('submit', (e)=> {
- 
-
-    // if(color.disabled)  {
-    //     e.preventDefault();
-    // } 
-
-    // Name Validator.
-    if (inputName.value !== "") {
-        userInputAutoSensing(inputName);
+submit.addEventListener('submit', (event)=> {
+   
+    //validates user
+    if(inputName.value != "" && UserNameValidator(inputName)) {
+        UserNameValidator(inputName);
     } else {
-        validationFailHint(inputName);
-        e.preventDefault();
+        showError(inputName);
+        event.preventDefault();
     }
 
-    // Email Validator.
-    if( inputEmail.value !== "" ) {
-        userInputAutoSensing(inputEmail);
+    // // Email Validator.
+    if( inputEmail.value != "" &&  UserEmailValidator(inputEmail)) {
+        UserEmailValidator(inputEmail);
     }else {
-        validationFailHint(inputEmail);
-        e.preventDefault();
+        showError(inputEmail);
+        event.preventDefault();
     }
 
-    //activity validator.
-    if (TotalCost !=  0) {
+    // // //activity validator.
+    if (TotalCost !=  0 ) {
         activitiesTitle.style.color = "#000";
         activitiesHint.style.display = "none";
     } else {
         activitiesTitle.style.color = "red";
         activitiesHint.style.display = "block";
-        e.preventDefault();
+        event.preventDefault();
     }
 
-    // // Payments Validator 
+    // // Payments Validator
+    if (payment.value == "credit-card") {
 
-    if(payment.value == "credit-card"){
-       
-        // cardValidator
-        if(!CardValidator(cardNumber)) {
-            e.preventDefault();
+        // Validates user entered card numbers
+        if(cardNumber == "" || !CardValidator(cardNumber) ) {
+            showError(cardNumber);
+            event.preventDefault();
+        } else {
+            CardValidator(cardNumber);
+          
         }
 
-        // zipValidator
-        if(!zipValidator(zipCode)) {
-            e.preventDefault();
+        // Validates user entered zipcode number
+        if( zipCode.value == "" || !zipValidator(zipCode)) {
+            showError(zipCode);
+            event.preventDefault();
+        } else {
+            zipValidator(zipCode);
         }
 
-        // cvvValidator
-        if (!cvvValidator(cvvNumber) ){
-            e.preventDefault();
+        // Validates user entered cvv numbers
+        if(cvvNumber.value == "" || !cvvValidator(cvvNumber) ) {
+            showError(cvvNumber);
+            event.preventDefault();
+        } else {
+            cvvValidator(cvvNumber);
         }
     }
-   
 });
-
